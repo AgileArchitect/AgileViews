@@ -18,12 +18,15 @@ namespace DocCoder.Export
     {
         private readonly JekyllExporterConfiguration _configuration;
 
+        public JekyllExporterConfiguration Configuration => _configuration;
+
+
         public JekyllExporter(JekyllExporterConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public void Export(View view)
+        public void Export(View view, IJekyllViewExporter imageExporter)
         {
             var path = Path.Combine(_configuration.JekyllPath, $"components/{view.Name}.md");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -40,7 +43,7 @@ namespace DocCoder.Export
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, new PlantUmlViewExporter())
+                    .AppendViewBlock(this, view, imageExporter)
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 

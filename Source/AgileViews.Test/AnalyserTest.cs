@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocCoder.Drawing;
 using DocCoder.Export;
 using DocCoder.Model;
 using Xunit;
@@ -15,7 +16,7 @@ namespace DocCoder.Test
         public void FoundProjects()
         {
             // arrange
-            var analyzer = new Analyser(@"d:\Projects\NControl\Source\NControl\NControl.sln");
+            var analyzer = new Analyser(@"D:\Projects\ncontrol\Source\NControl\NControl.sln");
 
             // act
             var projects = analyzer.Projects(Analyser.ALL_PROJECTS);
@@ -44,8 +45,8 @@ namespace DocCoder.Test
             view.AddChildren();
 
             // assert
-            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\Documentation\jekyll"));
-            exporter.Export(view);
+            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
+            exporter.Export(view, new SvgExporter());
         }
 
         [Fact]
@@ -66,8 +67,8 @@ namespace DocCoder.Test
             view.AddAllSystems();
             view.AddAllPeople();
 
-            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\Documentation\jekyll"));
-            exporter.Export(view);
+            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
+            exporter.Export(view, new SvgExporter());
         }
     }
 }

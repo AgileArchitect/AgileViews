@@ -28,7 +28,7 @@ namespace DocCoder.Model
 
         public string Name => Subject.Name;
 
-        internal ICollection<Element> Elements { get; set; }
+        public ICollection<Element> Elements { get; set; }
 
         public ICollection<Relationship> Relationships
         {

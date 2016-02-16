@@ -111,6 +111,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AgileViews.Drawing\AgileViews.Drawing.csproj">
+      <Project>{b5419ca9-ae23-49c1-8af1-8dc21c8fbf25}</Project>
+      <Name>AgileViews.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AgileViews\AgileViews.csproj">
       <Project>{d01d1904-740e-4239-93ba-ee06dac3a467}</Project>
       <Name>DocCoder</Name>
