@@ -7,8 +7,8 @@
     <ProjectGuid>{B5419CA9-AE23-49C1-8AF1-8DC21C8FBF25}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocCoder.Drawing</RootNamespace>
-    <AssemblyName>DocCoder.Drawing</AssemblyName>
+    <RootNamespace>AgileViews.Drawing</RootNamespace>
+    <AssemblyName>AgileViews.Drawing</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
