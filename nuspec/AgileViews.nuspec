@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>AgileViews</id>
+    <version>0.0.0</version>
+    <authors>Tom Staijen</authors>
+    <owners>Tom Staijen</owners>
+    <description>Generate documentation</description>
+    <summary></summary>
+    <projectUrl>https://github.com/AgileArchitect/AgileViews</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright (c) Tom Staijen and contributors</copyright>
+    <tags>uml generate views agile architect c#</tags>
+	 <dependencies>
+      <dependency id="Microsoft.CodeAnalysis.Analyzers" version="1.1.0" />
+	  <dependency id="Microsoft.CodeAnalysis.CSharp.Workspaces" version="1.1.1" />
+    </dependencies>
+  </metadata>
+</package>

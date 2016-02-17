@@ -5,6 +5,7 @@ var configuration = Argument("configuration", "Release");
 
 var solution = "./Source/AgileViews.sln";
 var project =  "./Source/AgileViews/AgileViews.csproj";
+var nuspec =  "./nuspec/AgileViews.nuspec";
 
 Task("Build")
 	.IsDependentOn("Restore-NuGet-Packages")
@@ -26,9 +27,23 @@ Task("Test")
  });
  
 Task("Package")
-	.IsDependentOn("Build")
+	.IsDependentOn("Test")
 	.Does(() => {
-		var spec = StartProcess("tools/nuget.exe", "spec ");
+		var nuGetPackSettings   = new NuGetPackSettings {
+                                Version                 = "0.1.1",
+                                Files                   = new [] 
+								{
+									new NuSpecContent {Source = "Source/AgileViews/bin/Release/AgileViews.dll", Target = "lib/net45"},
+									new NuSpecContent {Source = "Libs/Microsoft.Msagl.dll", Target = "lib/net45"},
+									new NuSpecContent {Source = "Libs/Microsoft.Msagl.Drawing.dll", Target = "lib/net45"},
+									new NuSpecContent {Source = "Libs/Microsoft.Msagl.GraphViewerGdi.dll", Target = "lib/net45"}
+                                },
+                                BasePath                = "./",
+                                OutputDirectory         = "./nuget",
+								Verbosity				= NuGetVerbosity.Detailed
+                            };
+		
+		NuGetPack(nuspec, nuGetPackSettings);
 	}
 );
 

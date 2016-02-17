@@ -30,3 +30,4 @@ _ReSharper*/
 Source/packages
 Tools/*
 !Tools/packages.config
+nuget/*
