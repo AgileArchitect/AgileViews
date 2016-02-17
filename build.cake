@@ -37,10 +37,10 @@ Task("Package")
 			Version                 = "0.1.1",
                                 Files                   = new [] 
 								{
-									new NuSpecContent {Source = "Source/AgileViews/bin/Release/AgileViews.dll", Target = "lib/net45"},
-									new NuSpecContent {Source = "Libs/Microsoft.Msagl.dll", Target = "lib/net45"},
-									new NuSpecContent {Source = "Libs/Microsoft.Msagl.Drawing.dll", Target = "lib/net45"},
-									new NuSpecContent {Source = "Libs/Microsoft.Msagl.GraphViewerGdi.dll", Target = "lib/net45"}
+									new NuSpecContent {Source = "Source/AgileViews/bin/Release/AgileViews.dll", Target = "lib"},
+									new NuSpecContent {Source = "Libs/Microsoft.Msagl.dll", Target = "lib"},
+									new NuSpecContent {Source = "Libs/Microsoft.Msagl.Drawing.dll", Target = "lib"},
+									new NuSpecContent {Source = "Libs/Microsoft.Msagl.GraphViewerGdi.dll", Target = "lib"}
                                 },
                                 BasePath                = "./",
                                 OutputDirectory         = "./nuget",
