@@ -4,6 +4,7 @@ var target = Argument("target", "Build");
 var configuration = Argument("configuration", "Release");
 
 var solution = "./Source/AgileViews.sln";
+var project =  "./Source/AgileViews/AgileViews.csproj";
 
 Task("Build")
 	.IsDependentOn("Restore-NuGet-Packages")
@@ -23,6 +24,13 @@ Task("Test")
  .Does(() => {
 	XUnit2("Source/AgileViews.Test/bin/Release/*.Test.dll");
  });
+ 
+Task("Package")
+	.IsDependentOn("Build")
+	.Does(() => {
+		var spec = StartProcess("tools/nuget.exe", "spec ");
+	}
+);
 
 Task("Default")
   .IsDependentOn("Build");
