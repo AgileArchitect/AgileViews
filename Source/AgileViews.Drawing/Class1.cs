@@ -48,9 +48,9 @@ namespace DocCoder.Drawing
             var graph = new ViewToGraph().Convert(view);
             
             // write the graph
-            new SvgWriter().Write(graph, Path.Combine(exporter.Configuration.JekyllPath, $"uml\\{guid}.svg"));
+            new SvgWriter().Write(graph, writer);
 
-            writer.WriteLine($" <p><object type='image/svg+xml' data='/uml/{guid}.svg' class='uml'>Your browser does not support SVG</object></p>");
+//          writer.WriteLine($" <p><object type='image/svg+xml' data='/uml/{guid}.svg' class='uml'>Your browser does not support SVG</object></p>");
         }
     }
 
@@ -93,6 +93,7 @@ namespace DocCoder.Drawing
             {
                 var node = graph.AddNode(e.Alias);
                 node.LabelText = e.Name;
+                node.Attr.Uri = e.GetInformation(Information.URL).FirstOrDefault();
                 _nodeDecorator(e,node);
                 return node;
             });
@@ -200,19 +201,22 @@ namespace DocCoder.Drawing
 
     public class SvgWriter
     {
-        public void Write(Graph graph, string filename)
+        public void Write(Graph graph, StreamWriter writer)
         {
-            var directory = Path.GetDirectoryName(filename);
-            Directory.CreateDirectory(directory);
-
-            using (var stream = new FileStream(filename, FileMode.OpenOrCreate))
+            using (var ms = new MemoryStream())
             {
-                var writer = new SvgGraphWriter(stream, graph);
-                writer.Write();
-                stream.Flush();
-                stream.Close();
-            }
+                var w = new SvgGraphWriter(ms, graph);
+                w.Write();
+                ms.Flush();
 
+                ms.Position = 0;
+                var sr = new StreamReader(ms);
+                var svg = sr.ReadToEnd();
+
+
+                writer.WriteLine(svg);
+            }
+            
         }
     }
 }

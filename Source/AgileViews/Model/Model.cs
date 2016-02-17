@@ -29,6 +29,7 @@ namespace DocCoder.Model
             var person = new Person();
             person.Name = name;
             person.Model = this;
+            person.Description = description;
 
             _elements.Add(person);
 
