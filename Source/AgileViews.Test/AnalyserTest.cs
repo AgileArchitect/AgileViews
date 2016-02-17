@@ -49,26 +49,26 @@ namespace DocCoder.Test
 //            exporter.Export(view, new SvgExporter());
 //        }
 
-        [Fact]
-        public void TestExport()
-        {
-            var workspace = new Workspace();
-
-            var model = workspace.GetModel();
-            var user = model.AddPerson("Employee Pharmacy", "An employee in a pharmacy", Location.External);
-            var ncontrol = model.AddSystem("NControl", "Medication Related HealthCare System", Location.Internal);
-            var ncasso = model.AddSystem("NCasso", "Healhcare Insurer Declaration Portal", Location.External);
-
-            user.Uses(ncontrol, "uses");
-            ncontrol.Uses(ncasso, "uses");
-
-            var view = workspace.CreateContextView(ncontrol);
-
-            view.AddAllSystems();
-            view.AddAllPeople();
-
-            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
-            exporter.Export(view, new SvgExporter());
-        }
+//        [Fact]
+//        public void TestExport()
+//        {
+//            var workspace = new Workspace();
+//
+//            var model = workspace.GetModel();
+//            var user = model.AddPerson("Employee Pharmacy", "An employee in a pharmacy", Location.External);
+//            var ncontrol = model.AddSystem("NControl", "Medication Related HealthCare System", Location.Internal);
+//            var ncasso = model.AddSystem("NCasso", "Healhcare Insurer Declaration Portal", Location.External);
+//
+//            user.Uses(ncontrol, "uses");
+//            ncontrol.Uses(ncasso, "uses");
+//
+//            var view = workspace.CreateContextView(ncontrol);
+//
+//            view.AddAllSystems();
+//            view.AddAllPeople();
+//
+//            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
+//            exporter.Export(view, new SvgExporter());
+//        }
     }
 }
