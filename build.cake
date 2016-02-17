@@ -29,8 +29,12 @@ Task("Test")
 Task("Package")
 	.IsDependentOn("Test")
 	.Does(() => {
-		var nuGetPackSettings   = new NuGetPackSettings {
-                                Version                 = "0.1.1",
+		
+		CreateDirectory("nuget");
+		
+		var nuGetPackSettings   = new NuGetPackSettings 
+		{
+			Version                 = "0.1.1",
                                 Files                   = new [] 
 								{
 									new NuSpecContent {Source = "Source/AgileViews/bin/Release/AgileViews.dll", Target = "lib/net45"},
