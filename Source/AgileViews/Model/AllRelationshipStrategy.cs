@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DocCoder.Model
+namespace AgileViews.Model
 {
     public class AllRelationshipStrategy : IRelationshipStrategy
     {

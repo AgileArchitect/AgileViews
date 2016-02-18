@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using DocCoder.Model;
+using AgileViews.Model;
 
-namespace DocCoder.Export
+namespace AgileViews.Export.Jekyll.Views
 {
     public class PlantUmlViewExporter : IJekyllViewExporter
     {

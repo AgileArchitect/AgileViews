@@ -1,12 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using DocCoder.Export;
-using DocCoder.Model;
+using AgileViews.Model;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Drawing;
@@ -17,43 +12,8 @@ using Edge = Microsoft.Msagl.Drawing.Edge;
 using Label = Microsoft.Msagl.Drawing.Label;
 using Node = Microsoft.Msagl.Drawing.Node;
 
-namespace DocCoder.Drawing
+namespace AgileViews.Export.Svg
 {
-    public class Class1
-    {
-        public static void Main(string[] args)
-        {
-            var graph = new Graph();
-            graph.AddNode(new Node("pietje"));
-
-            var renderer = new GraphRenderer(graph);
-            renderer.CalculateLayout();
-
-            using (var stream = new FileStream("test.svg", FileMode.OpenOrCreate))
-            {
-                var writer = new SvgGraphWriter(stream, graph);
-                writer.Write();
-                stream.Flush();
-                stream.Close();
-            }
-        }
-    }
-
-    public class SvgExporter : IJekyllViewExporter
-    {
-        public void Export(JekyllExporter exporter, View view, StreamWriter writer)
-        {
-            var guid = Guid.NewGuid().ToString().Replace("-", "");
-            // create the graph
-            var graph = new ViewToGraph().Convert(view);
-            
-            // write the graph
-            new SvgWriter().Write(graph, writer);
-
-//          writer.WriteLine($" <p><object type='image/svg+xml' data='/uml/{guid}.svg' class='uml'>Your browser does not support SVG</object></p>");
-        }
-    }
-
     public class ViewToGraph
     {
         private Action<Element, Node> _nodeDecorator = (e,n) =>
@@ -91,7 +51,7 @@ namespace DocCoder.Drawing
 
             view.Elements.ToDictionary(e => e, e =>
             {
-                var node = graph.AddNode(e.Alias);
+                var node = graph.AddNode((string) e.Alias);
                 node.LabelText = e.Name;
                 node.Attr.Uri = e.GetInformation(Information.URL).FirstOrDefault();
                 _nodeDecorator(e,node);
@@ -196,27 +156,6 @@ namespace DocCoder.Drawing
                 attr.XRadius = r;
                 attr.YRadius = r;
             }
-        }
-    }
-
-    public class SvgWriter
-    {
-        public void Write(Graph graph, StreamWriter writer)
-        {
-            using (var ms = new MemoryStream())
-            {
-                var w = new SvgGraphWriter(ms, graph);
-                w.Write();
-                ms.Flush();
-
-                ms.Position = 0;
-                var sr = new StreamReader(ms);
-                var svg = sr.ReadToEnd();
-
-
-                writer.WriteLine(svg);
-            }
-            
         }
     }
 }

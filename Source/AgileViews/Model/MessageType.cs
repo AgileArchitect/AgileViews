@@ -1,4 +1,4 @@
-namespace DocCoder.Model
+namespace AgileViews.Model
 {
     public enum MessageType
     {

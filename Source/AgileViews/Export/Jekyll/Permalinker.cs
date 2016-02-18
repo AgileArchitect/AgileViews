@@ -1,6 +1,6 @@
-using DocCoder.Model;
+using AgileViews.Model;
 
-namespace DocCoder.Export
+namespace AgileViews.Export.Jekyll
 {
     public class Permalinker
     {

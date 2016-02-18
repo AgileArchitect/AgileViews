@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DocCoder.Model
+namespace AgileViews.Model
 {
     public interface IRelationshipStrategy
     {

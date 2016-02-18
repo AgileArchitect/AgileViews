@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DocCoder.Model
+namespace AgileViews.Model
 {
     public class System : Element
     {

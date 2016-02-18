@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocCoder.Model;
+using AgileViews.Model;
 using Microsoft.CodeAnalysis;
 
-namespace DocCoder
+namespace AgileViews.Scrape
 {
     public class Analyser
     {

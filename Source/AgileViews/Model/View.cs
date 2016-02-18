@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DocCoder.Model
+namespace AgileViews.Model
 {
     /// <summary>
     /// We want different kinds of views

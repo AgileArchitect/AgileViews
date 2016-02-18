@@ -11,7 +11,11 @@ Task("Build")
 	.IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    MSBuild(solution, s => s.SetConfiguration(configuration).SetVerbosity(Verbosity.Quiet));
+	MSBuild(solution, s => {	
+		s.SetConfiguration(configuration)
+		 .WithProperty("TreatWarningsAsErrors", "True")
+		 .SetVerbosity(Verbosity.Quiet);
+	});
 });
 
 Task("Restore-NuGet-Packages")
@@ -34,7 +38,7 @@ Task("Package")
 		
 		var nuGetPackSettings   = new NuGetPackSettings 
 		{
-			Version                 = "0.1.1",
+			Version                 = "0.1.2",
                                 Files                   = new [] 
 								{
 									new NuSpecContent {Source = "Source/AgileViews/bin/Release/AgileViews.dll", Target = "lib"},

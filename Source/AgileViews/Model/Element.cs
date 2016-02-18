@@ -1,6 +1,4 @@
-using System.Linq;
-
-namespace DocCoder.Model
+namespace AgileViews.Model
 {
     public abstract class Element : Information
     {
@@ -9,7 +7,7 @@ namespace DocCoder.Model
             
         }
 
-        public DocCoder.Model.Model Model { get; set; }
+        public Model Model { get; set; }
 
         /// <summary>
         /// Element name which will be displayed in diagrams

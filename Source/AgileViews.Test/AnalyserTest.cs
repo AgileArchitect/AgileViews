@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DocCoder.Drawing;
-using DocCoder.Export;
-using DocCoder.Model;
-using Xunit;
-
-namespace DocCoder.Test
+﻿namespace AgileViews.Test
 {
     public class AnalyserTest
     {
