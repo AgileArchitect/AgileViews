@@ -1,22 +1,28 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using AgileViews.Model;
 
 namespace AgileViews.Export.Jekyll
 {
     public class Permalinker
     {
-        public static string GetDefaultViewType(Element element)
+        public static IDictionary<Type, ViewType> _DefaultViewTypes = new Dictionary<Type, ViewType>()
         {
-            if (element is Model.System)
-                return $"/context/{element.Alias}";
-            if (element is Model.Container)
-                return $"/container/{element.Alias}";
+            { typeof(Model.System), ViewType.Context},
+            { typeof(Model.Container), ViewType.Components},
+            { typeof(Model.Component), ViewType.Classes},
+        };
 
-            return null;
+        public static ViewType GetDefaultViewType(Element element)
+        {
+            var type = element.GetType();
+            return _DefaultViewTypes[element.GetType()];
         }
 
-        public static string GetPermalink(ViewType viewType, Element element)
+        public static string GetUrl(ViewType viewType, Element element)
         {
-            return $"/{viewType.ToString().ToLower()}/{element.Alias.ToLower()}";
+            return $"/{viewType}/{element.Alias}";
         }
     }
 }

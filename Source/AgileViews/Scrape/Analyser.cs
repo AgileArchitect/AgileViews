@@ -16,12 +16,18 @@ namespace AgileViews.Scrape
         {
             var ws = Microsoft.CodeAnalysis.MSBuild.MSBuildWorkspace.Create();
             _solution = ws.OpenSolutionAsync(solutionPath).Result;
-            var proj = _solution.Projects.Select(p => p.Name);
         }
 
         public ICollection<Project> Projects(Func<Project,bool> predicate)
         {
             return _solution.Projects.Where(predicate).ToList();
+        }
+
+        public ICollection<string> Find()
+        {
+            _solution.Projects.First().GetCompilationAsync().Result
+
+            return new[] {"a"};
         }
     }
 
