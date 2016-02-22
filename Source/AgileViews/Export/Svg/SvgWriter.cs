@@ -18,7 +18,7 @@ namespace AgileViews.Export.Svg
                 var svg = sr.ReadToEnd();
 
 
-                writer.WriteLine(svg);
+                writer.WriteLine(svg.Substring(svg.IndexOf("<svg ")));
             }
             
         }
