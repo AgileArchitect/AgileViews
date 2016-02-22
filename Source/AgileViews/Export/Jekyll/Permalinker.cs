@@ -6,11 +6,6 @@ namespace AgileViews.Export.Jekyll
     {
         public static string GetDefaultViewType(Element element)
         {
-            if (element is Model.System)
-                return $"/context/{element.Alias}";
-            if (element is Model.Container)
-                return $"/container/{element.Alias}";
-
             return null;
         }
 

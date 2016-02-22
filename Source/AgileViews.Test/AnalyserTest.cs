@@ -1,22 +1,41 @@
-﻿namespace AgileViews.Test
+﻿using System.Linq;
+using AgileViews.Export.Jekyll;
+using AgileViews.Export.Svg;
+using AgileViews.Model;
+using AgileViews.Scrape;
+using Xunit;
+
+namespace AgileViews.Test
 {
     public class AnalyserTest
     {
-//        [Fact]
-//        public void FoundProjects()
-//        {
-//            // arrange
-//            var analyzer = new Analyser(@"D:\Projects\ncontrol\Source\NControl\NControl.sln");
-//
-//            // act
-//            var projects = analyzer.Projects(Analyser.ALL_PROJECTS);
-//
-//            var workspace = new Workspace();
-//
-//            var model = workspace.GetModel();
-//
-//            var system = model.AddSystem("NControl", "What we make", Location.Internal);
-//
+        [Fact]
+        public void FoundProjects()
+        {
+            // arrange
+            var analyzer = new Analyser(@"..\..\..\AgileViews.sln");
+
+            // act
+            var projects = analyzer.Projects(p => 
+            p.Name.Contains("Agile") && !p.Name.Contains("Test"));
+
+            var classes = analyzer.Classes(projects, c => true).ToList();
+            var interfaces = analyzer.Interfaces(projects, i => true).ToList();
+
+            var workspace = new Workspace();
+            var model = workspace.GetModel();
+
+            model.Add(projects.Single());
+            model.AddAll(classes);
+            model.AddAll(interfaces);
+
+            foreach (var c in classes)
+            {
+                model.AddAll(c.RelationshipsFromClass());
+            }
+
+            model.ResolveNodes();
+
 //            var dict = projects.ToDictionary(p => p.Id, p => p);
 //            var elements = projects.ToDictionary(p => p.Id, p => system.AddContainer(p.Name, p.AssemblyName));
 //
@@ -30,14 +49,14 @@
 //                    }
 //                }
 //            }
-//
-//            var view = workspace.CreateContainerView(system);
-//            view.AddChildren();
-//
-//            // assert
-//            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
-//            exporter.Export(view, new SvgExporter());
-//        }
+
+            var view = workspace.CreateView(projects.Single());
+            view.AddChildren();
+
+            // assert
+            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
+            exporter.Export(view);
+        }
 
 //        [Fact]
 //        public void TestExport()

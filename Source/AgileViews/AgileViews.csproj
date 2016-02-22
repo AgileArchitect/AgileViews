@@ -57,6 +57,18 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.1.1\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Msagl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=640c57aa40e7ae7d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Microsoft.Msagl.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Msagl.Drawing, Version=0.0.0.0, Culture=neutral, PublicKeyToken=8a3d7c21d5fa1306, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Microsoft.Msagl.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Msagl.GraphViewerGdi, Version=0.0.0.0, Culture=neutral, PublicKeyToken=fffc27ea4058b3a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\Microsoft.Msagl.GraphViewerGdi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
@@ -102,23 +114,17 @@
     <Compile Include="Export\Jekyll\IJekyllViewExporter.cs" />
     <Compile Include="Export\Jekyll\JekyllExtensionsToStreamWriter.cs" />
     <Compile Include="Export\Jekyll\Permalinker.cs" />
-    <Compile Include="Export\Jekyll\Views\PlantUmlContextStrategy.cs" />
     <Compile Include="Model\AllRelationshipStrategy.cs" />
-    <Compile Include="Model\Component.cs" />
-    <Compile Include="Model\Container.cs" />
     <Compile Include="Model\ExecutionType.cs" />
     <Compile Include="Model\Information.cs" />
     <Compile Include="Model\Element.cs" />
     <Compile Include="Export\Jekyll\JekyllExporter.cs" />
     <Compile Include="Export\Jekyll\JekyllExporterConfiguration.cs" />
-    <Compile Include="Export\Jekyll\Views\PlantUmlViewExporter.cs" />
     <Compile Include="Model\IRelationshipStrategy.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\MessageType.cs" />
     <Compile Include="Model\Model.cs" />
-    <Compile Include="Model\System.cs" />
-    <Compile Include="Model\Person.cs" />
     <Compile Include="Model\ViewType.cs" />
     <Compile Include="Model\Workspace.cs" />
     <Compile Include="Program.cs" />
@@ -135,20 +141,6 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Drawing\drawing.csproj">
-      <Project>{b76f8f71-4b00-4242-be36-c9f0732511f7}</Project>
-      <Name>drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GraphViewerGDI\GraphViewerGDI.csproj">
-      <Project>{725cd2cb-cf37-414e-a5a6-f1d87d4d6ede}</Project>
-      <Name>GraphViewerGDI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MSAGL\Msagl.csproj">
-      <Project>{415d3e3f-7105-46c1-84d2-7ecb34213d92}</Project>
-      <Name>Msagl</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

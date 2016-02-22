@@ -1,5 +1,6 @@
 using System.IO;
 using AgileViews.Export.Jekyll.Views;
+using AgileViews.Export.Svg;
 using AgileViews.Model;
 
 namespace AgileViews.Export.Jekyll
@@ -27,7 +28,7 @@ namespace AgileViews.Export.Jekyll
             _configuration = configuration;
         }
 
-        public void Export(View view, IJekyllViewExporter imageExporter)
+        public void Export(View view)
         {
             var path = Path.Combine(_configuration.JekyllPath, $"components/{view.Name}.md");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -44,7 +45,7 @@ namespace AgileViews.Export.Jekyll
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, imageExporter)
+                    .AppendViewBlock(this, view, new SvgExporter())
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 

@@ -7,7 +7,7 @@ namespace AgileViews.Model
     {
         public ICollection<Relationship> GetRelationships(Model model, ICollection<Element> elements)
         {
-            return model.Relationships.Where(r => elements.Contains(r.Source) && elements.Contains(r.Target)).ToList();
+            return model.Relationships.Where(r => r.Source != null && r.Target != null && elements.Contains(r.Source) && elements.Contains(r.Target)).ToList();
         }
     }
 }

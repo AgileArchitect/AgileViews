@@ -44,22 +44,13 @@ namespace AgileViews.Model
             }
         }
 
-        public void AddAllPeople()
-        {
-            AddElements(e => e is Person);
-        }
-
-        public void AddAllSystems()
-        {
-            AddElements(e => e is System);
-        }
-
         public void AddChildren()
         {
             AddElements(e =>
             {
                 var parent = e.GetParent();
-                return parent != null && parent.Equals(Subject);
+                var equality = parent != null && parent.Equals(Subject);
+                return equality;
             });
         }
     }

@@ -1,10 +1,31 @@
+using System;
+using System.Diagnostics;
+
 namespace AgileViews.Model
 {
+    [DebuggerDisplay("{UserData}")]
+    public class Element<T> : Element
+    {
+        public Element Parent { get; set; }
+
+        public T UserData { get; set; }
+        public override Element GetParent()
+        {
+            return Parent;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj != null && obj == this;
+        }
+    }
+
     public abstract class Element : Information
     {
+        private Guid _guid = Guid.NewGuid();
+
         internal Element()
         {
-            
         }
 
         public Model Model { get; set; }

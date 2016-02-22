@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.Remoting;
 
 namespace AgileViews.Model
 {
@@ -18,46 +21,44 @@ namespace AgileViews.Model
 
         public IReadOnlyCollection<Element> Elements => new ReadOnlyCollection<Element>(_elements);
 
-        public Person AddPerson(string name, string description)
+        public void AddAll(IEnumerable<Element> elements)
         {
-            return AddPerson(name, description, Location.Unknown);
+            _elements.AddRange(elements);
         }
 
-        public Person AddPerson(string name, string description, Location location)
+        public void Add(Element element)
         {
-            var person = new Person();
-            person.Name = name;
-            person.Model = this;
-            person.Description = description;
-
-            _elements.Add(person);
-
-            return person;
+            _elements.Add(element);
         }
 
-        public System AddSystem(string name, string description, Location location)
+        public void AddAll(IEnumerable<Relationship> relationships)
         {
-            var system = new System();
-            system.Name = name;
-            system.Model = this;
-            system.Description = description;
-
-            _elements.Add(system);
-
-            return system;
+            _relationships.AddRange(relationships);
         }
 
-        public Component AddComponent(Container system, string name, string description)
+        public void Add(Relationship relationship)
         {
-            var component = new Component();
-            component.Name = name;
-            component.Description = description;
-            component.Model = this;
+            _relationships.Add(relationship);
+        }
 
-            system.Add(component);
-            _elements.Add(component);
+        public void ResolveNodes()
+        {
+            var doublesNames =
+                _elements.Select(e => e.Alias).GroupBy(e => e).Where(g => g.Count() > 1).Select(g => g.Key);
+            if (doublesNames.Any())
+            {
+                throw new ArgumentException("You have double names");
+            }
+            var nodeMap = _elements.ToDictionary(n => n.Alias, n => n);
 
-            return component;
+            foreach (var rel in _relationships.Where(r => r.Source == null || r.Target == null))
+            {
+                if (rel.Source == null && nodeMap.ContainsKey(rel.SourceName))
+                    rel.Source = nodeMap[rel.SourceName];
+
+                if (rel.Target == null && nodeMap.ContainsKey(rel.TargetName))
+                    rel.Target = nodeMap[rel.TargetName];
+            }
         }
 
         internal Relationship AddRelationship(Element source, Element target, string description)
@@ -74,21 +75,5 @@ namespace AgileViews.Model
             return relationship;
         }
 
-
-        internal Container AddContainer(System parent, string name, string description)
-        {
-            var container = new Container();
-
-            container.Name = name;
-            container.Description = description;
-            container.Parent = parent;
-            container.Model = this;
-
-            parent.Add(container);
-            _elements.Add(container);
-
-            return container;
-
-        }
     }
 }
