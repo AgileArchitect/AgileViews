@@ -9,5 +9,10 @@
         public string TargetRole { get; set; }
 
         public string Label { get; set; }
+
+
+        public string SourceName { get; set; }
+
+        public string TargetName { get; set; }
     }
 }

@@ -61,11 +61,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Microsoft.Msagl.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Msagl.Drawing, Version=3.0.0.0, Culture=neutral, PublicKeyToken=8a3d7c21d5fa1306, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Msagl.Drawing, Version=0.0.0.0, Culture=neutral, PublicKeyToken=8a3d7c21d5fa1306, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Microsoft.Msagl.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Msagl.GraphViewerGdi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=fffc27ea4058b3a1, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Msagl.GraphViewerGdi, Version=0.0.0.0, Culture=neutral, PublicKeyToken=fffc27ea4058b3a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\Microsoft.Msagl.GraphViewerGdi.dll</HintPath>
     </Reference>
@@ -114,23 +114,17 @@
     <Compile Include="Export\Jekyll\IJekyllViewExporter.cs" />
     <Compile Include="Export\Jekyll\JekyllExtensionsToStreamWriter.cs" />
     <Compile Include="Export\Jekyll\Permalinker.cs" />
-    <Compile Include="Export\Jekyll\Views\PlantUmlContextStrategy.cs" />
     <Compile Include="Model\AllRelationshipStrategy.cs" />
-    <Compile Include="Model\Component.cs" />
-    <Compile Include="Model\Container.cs" />
     <Compile Include="Model\ExecutionType.cs" />
     <Compile Include="Model\Information.cs" />
     <Compile Include="Model\Element.cs" />
     <Compile Include="Export\Jekyll\JekyllExporter.cs" />
     <Compile Include="Export\Jekyll\JekyllExporterConfiguration.cs" />
-    <Compile Include="Export\Jekyll\Views\PlantUmlViewExporter.cs" />
     <Compile Include="Model\IRelationshipStrategy.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\MessageType.cs" />
     <Compile Include="Model\Model.cs" />
-    <Compile Include="Model\System.cs" />
-    <Compile Include="Model\Person.cs" />
     <Compile Include="Model\ViewType.cs" />
     <Compile Include="Model\Workspace.cs" />
     <Compile Include="Program.cs" />

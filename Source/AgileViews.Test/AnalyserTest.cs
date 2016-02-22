@@ -3,9 +3,7 @@ using AgileViews.Export.Jekyll;
 using AgileViews.Export.Svg;
 using AgileViews.Model;
 using AgileViews.Scrape;
-using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
-
 
 namespace AgileViews.Test
 {
@@ -18,40 +16,46 @@ namespace AgileViews.Test
             var analyzer = new Analyser(@"..\..\..\AgileViews.sln");
 
             // act
-            var projects = analyzer.Projects(Analyser.ALL_PROJECTS);
+            var projects = analyzer.Projects(p => 
+            p.Name.Contains("Agile") && !p.Name.Contains("Test"));
 
-            Assert.NotEqual(0, projects.Count);
+            var classes = analyzer.Classes(projects, c => true).ToList();
+            var interfaces = analyzer.Interfaces(projects, i => true).ToList();
 
             var workspace = new Workspace();
-
             var model = workspace.GetModel();
 
-            var system = model.AddSystem("NControl", "What we make", Location.Internal);
+            model.Add(projects.Single());
+            model.AddAll(classes);
+            model.AddAll(interfaces);
 
-            var dict = projects.ToDictionary(p => p.Id, p => p);
-            var elements = projects.ToDictionary(p => p.Id, p => system.AddContainer(p.Name, p.AssemblyName));
-
-            foreach (var p in projects)
+            foreach (var c in classes)
             {
-                foreach (var reference in p.ProjectReferences)
-                {
-                    if (dict.ContainsKey(reference.ProjectId))
-                    {
-                        elements[p.Id].Uses(elements[reference.ProjectId], "reference");
-                    }
-                }
+                model.AddAll(c.RelationshipsFromClass());
             }
 
-            var compolation =
-                projects.First().GetCompilationAsync().Result.SyntaxTrees.First().GetRoot().DescendantNodesAndSelf().Where(x => x.IsKind(x));
+            model.ResolveNodes();
 
+//            var dict = projects.ToDictionary(p => p.Id, p => p);
+//            var elements = projects.ToDictionary(p => p.Id, p => system.AddContainer(p.Name, p.AssemblyName));
+//
+//            foreach (var p in projects)
+//            {
+//                foreach (var reference in p.ProjectReferences)
+//                {
+//                    if (dict.ContainsKey(reference.ProjectId))
+//                    {
+//                        elements[p.Id].Uses(elements[reference.ProjectId], "reference");
+//                    }
+//                }
+//            }
 
-            var view = workspace.CreateContainerView(system);
+            var view = workspace.CreateView(projects.Single());
             view.AddChildren();
 
             // assert
             var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
-            exporter.Export(view, new SvgExporter());
+            exporter.Export(view);
         }
 
 //        [Fact]

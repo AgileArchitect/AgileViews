@@ -1,5 +1,6 @@
 using System.IO;
 using AgileViews.Export.Jekyll.Views;
+using AgileViews.Export.Svg;
 using AgileViews.Model;
 
 namespace AgileViews.Export.Jekyll
@@ -27,7 +28,7 @@ namespace AgileViews.Export.Jekyll
             _configuration = configuration;
         }
 
-        public void Export(View view, IJekyllViewExporter diagramExporter)
+        public void Export(View view)
         {
             var path = Path.Combine(_configuration.JekyllPath, $"components/{view.Name}.md");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -37,14 +38,14 @@ namespace AgileViews.Export.Jekyll
 
                 writer.WriteLine("---");
                 writer.WriteLine("layout: page");
-                writer.WriteLine($"title: {view.Name} - {view.ViewType}");
-                writer.WriteLine($"permalink: {Permalinker.GetUrl(view.ViewType, view.Subject)}");
+                writer.WriteLine($"title: {view.Name}");
+                writer.WriteLine($"permalink: /{scope}/{view.Name}");
                 writer.WriteLine($"tags: [generated, {scope}, diagram]");
                 writer.WriteLine("---");
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, diagramExporter)
+                    .AppendViewBlock(this, view, new SvgExporter())
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 
