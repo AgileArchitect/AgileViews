@@ -14,7 +14,7 @@ namespace AgileViews.Test
         public void FoundProjects()
         {
             // arrange
-            var analyzer = new Analyser(@"..\..\..\AgileViews.sln");
+            var analyzer = new RoslynAnalyser(@"..\..\..\AgileViews.sln");
 
             // act
             var projects = analyzer.Projects(p => p.Name.Contains("Agile") && !p.Name.Contains("Test"));

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using AgileViews.Export.Svg;
 using Microsoft.Msagl.Core.Layout;
@@ -80,10 +79,5 @@ namespace AgileViews.Model
             public Dictionary<string, NodeStyle> NodeStyle { get; set; } 
             public Dictionary<string, EdgeStyle> EdgeStyle { get; set; }
         }
-    }
-
-    public class Rationale : Attribute
-    {
-        public string Text { get; set; }
     }
 }

@@ -16,12 +16,12 @@ namespace AgileViews.Scrape
     /// - Find and group classes/interfaces/enums as component (having a single type as leader)
     /// - Find classes/interfaces/enums as component content
     /// </summary>
-    public class Analyser
+    public class RoslynAnalyser
     {
         public static Predicate<Project> ALL_PROJECTS = p => true;
 
         private Solution _solution;
-        public Analyser(string solutionPath)
+        public RoslynAnalyser(string solutionPath)
         {
             var ws = Microsoft.CodeAnalysis.MSBuild.MSBuildWorkspace.Create();
             _solution = ws.OpenSolutionAsync(solutionPath).Result;
@@ -68,7 +68,7 @@ namespace AgileViews.Scrape
 
                 foreach (var s in comp.SyntaxTrees)
                 {
-                    var semantic = comp.GetSemanticModel(s);
+                    var sm = comp.GetSemanticModel(s);
 
                     foreach (
                         var decl in
@@ -77,8 +77,14 @@ namespace AgileViews.Scrape
                                 .OfType<ClassDeclarationSyntax>()
                                 .Where(x => predicate(x)))
                     {
-
                         string name = decl.Identifier.Text;
+
+                        var cs = sm.GetDeclaredSymbol(decl);
+                        if (cs.GetAttributes().Any())
+                        {
+                            Console.WriteLine(".");
+                        }
+
 
                         if (decl.TypeParameterList != null)
                             name += decl.TypeParameterList.ToString();
@@ -110,7 +116,6 @@ namespace AgileViews.Scrape
                                 .OfType<InterfaceDeclarationSyntax>()
                                 .Where(x => predicate(x)))
                     {
-
                         string name = decl.Identifier.Text;
 
                         if (decl.TypeParameterList != null)

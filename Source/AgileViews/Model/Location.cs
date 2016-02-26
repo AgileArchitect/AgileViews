@@ -1,5 +1,6 @@
 namespace AgileViews.Model
 {
+    [Rationale("pietje")]
     public enum Location
     {
         Unknown = 0,

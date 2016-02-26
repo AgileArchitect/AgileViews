@@ -109,11 +109,12 @@
   <ItemGroup>
     <Compile Include="Export\Svg\EdgeStyle.cs" />
     <Compile Include="Export\Svg\IEdgeStyle.cs" />
+    <Compile Include="Model\Rationale.cs" />
+    <Compile Include="Scrape\RoslynAnalyser.cs" />
     <Compile Include="Export\Svg\INodeStyle.cs" />
     <Compile Include="Export\Svg\NodeStyle.cs" />
     <Compile Include="Extensions\ExtensionsToEnumerable.cs" />
     <Compile Include="Extensions\ExtentionsToView.cs" />
-    <Compile Include="Scrape\Analyser.cs" />
     <Compile Include="Export\Svg\SvgWriter.cs" />
     <Compile Include="Export\Jekyll\Views\ElementListViewExporter.cs" />
     <Compile Include="Export\Jekyll\Views\AbstractViewExporter.cs" />
@@ -133,15 +134,14 @@
     <Compile Include="Model\Model.cs" />
     <Compile Include="Model\ViewType.cs" />
     <Compile Include="Model\Workspace.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Relationship.cs" />
     <Compile Include="Model\View.cs" />
     <Compile Include="Export\Svg\SvgExporter.cs" />
     <Compile Include="Export\Svg\ViewToGraph.cs" />
+    <Compile Include="Scrape\PackageAnalyser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
