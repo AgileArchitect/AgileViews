@@ -17,58 +17,6 @@ using Node = Microsoft.Msagl.Drawing.Node;
 
 namespace AgileViews.Export.Svg
 {
-    public interface INodeStyle
-    {
-        void Apply(Node node);
-    }
-
-    public class NodeStyle : INodeStyle
-    {
-        /// <summary>
-        /// Space within the node around the label
-        /// </summary>
-        public int Margin { get; set; }
-        public double Radius { get; set; }
-        public Color FillColor { get; set; }
-        public Color BorderColor { get; set; }
-        public double BorderWidth { get; set; }
-
-        public Shape Shape { get; set; }
-        public void Apply(Node node)
-        {
-            node.Attr.LabelMargin = Margin;
-            node.Attr.FillColor = FillColor;
-            node.Attr.Shape = Shape;
-            node.Attr.XRadius = Radius;
-            node.Attr.YRadius = Radius;
-            node.Attr.LineWidth = BorderWidth;
-        }
-    }
-
-    public interface IEdgeStyle
-    {
-        void Apply(Edge edge);
-    }
-
-    public class EdgeStyle : IEdgeStyle
-    {
-        public Color Color { get; set; }
-        public double LineWidth { get; set; }
-
-        public ArrowStyle SourceStyle { get; set; }
-
-        public ArrowStyle TargetStyle { get; set; }
-
-        public void Apply(Edge edge)
-        {
-            edge.Attr.ArrowheadAtSource = SourceStyle;
-            edge.Attr.ArrowheadAtTarget = TargetStyle;
-            edge.Attr.LineWidth = LineWidth;
-            edge.Attr.Color = Color;
-        }
-    }
-
-
     public class ViewToGraph
     {
         private Action<Element, Node> _nodeDecorator = (e, n) =>
@@ -113,14 +61,12 @@ namespace AgileViews.Export.Svg
                 _edgeDecorator(rel,edge);
             }
 
-            SetConsolasFontAndSize(graph, 13);
+            SetConsolasFontAndSize(graph, 11);
 
             graph.LayoutAlgorithmSettings = PickLayoutAlgorithmSettings(graph.NodeCount, graph.EdgeCount);
 
             var renderer = new GraphRenderer(graph);
             renderer.CalculateLayout();
-
-            SetConsolasFontAndSize(graph, 11);
 
             return graph;
         }

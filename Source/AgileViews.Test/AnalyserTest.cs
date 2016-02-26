@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AgileViews.Export.Jekyll;
 using AgileViews.Export.Svg;
+using AgileViews.Extensions;
 using AgileViews.Model;
 using AgileViews.Scrape;
 using Xunit;
@@ -16,16 +17,18 @@ namespace AgileViews.Test
             var analyzer = new Analyser(@"..\..\..\AgileViews.sln");
 
             // act
-            var projects = analyzer.Projects(p => 
-            p.Name.Contains("Agile") && !p.Name.Contains("Test"));
+            var projects = analyzer.Projects(p => p.Name.Contains("Agile") && !p.Name.Contains("Test"));
 
-            var classes = analyzer.Classes(projects, c => true).ToList();
-            var interfaces = analyzer.Interfaces(projects, i => true).ToList();
 
             var workspace = new Workspace();
             var model = workspace.GetModel();
 
-            model.Add(projects.Single());
+            model.AddAll(projects);
+            model.AddAll(analyzer.GetProjectDependencies(projects));
+
+            var classes = analyzer.Classes(projects, c => true).ToList();
+            var interfaces = analyzer.Interfaces(projects, i => true).ToList();
+
             model.AddAll(classes);
             model.AddAll(interfaces);
 
@@ -36,22 +39,11 @@ namespace AgileViews.Test
 
             model.ResolveNodes();
 
-//            var dict = projects.ToDictionary(p => p.Id, p => p);
-//            var elements = projects.ToDictionary(p => p.Id, p => system.AddContainer(p.Name, p.AssemblyName));
-//
-//            foreach (var p in projects)
-//            {
-//                foreach (var reference in p.ProjectReferences)
-//                {
-//                    if (dict.ContainsKey(reference.ProjectId))
-//                    {
-//                        elements[p.Id].Uses(elements[reference.ProjectId], "reference");
-//                    }
-//                }
-//            }
+            model.ElementByName("Element").Add(Information.URL, "http://www.google.nl");
 
             var view = workspace.CreateView(projects.Single());
-            view.AddChildren();
+            //view.AddChildren();
+            view.AddEverythingRelatedTo(model.ElementByName("Element"));
 
             // assert
             var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));

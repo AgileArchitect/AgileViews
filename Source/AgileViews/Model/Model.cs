@@ -13,6 +13,11 @@ namespace AgileViews.Model
             
         }
 
+        public Element ElementByName(string name)
+        {
+            return _elements.SingleOrDefault(e => e.Name == name);
+        }
+
         private readonly List<Element> _elements = new List<Element>();
 
         private readonly List<Relationship> _relationships = new List<Relationship>();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AgileViews.Extensions;
 using AgileViews.Model;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -32,6 +33,27 @@ namespace AgileViews.Scrape
             return _solution.Projects.Where(p => predicate(p)).Select(p => new Element<Project> {UserData = p, Name = p.Name}).ToList();
         }
 
+        public ICollection<Relationship> GetProjectDependencies(IEnumerable<Element<Project>> projects)
+        {
+            var dict = projects.ToDictionary(p => p.UserData.Id, p => p);
+            var result = new List<Relationship>();
+            foreach (var p in projects)
+            {
+                foreach (var reference in p.UserData.ProjectReferences)
+                {
+                    if (dict.ContainsKey(reference.ProjectId))
+                    {
+                        result.Add(new Relationship
+                        {
+                            Source = p,
+                            Target = dict[reference.ProjectId]
+                        });
+                    }
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// Yields classes and interfaces
         /// </summary>
@@ -46,6 +68,8 @@ namespace AgileViews.Scrape
 
                 foreach (var s in comp.SyntaxTrees)
                 {
+                    var semantic = comp.GetSemanticModel(s);
+
                     foreach (
                         var decl in
                             s.GetRoot()
@@ -135,20 +159,44 @@ namespace AgileViews.Scrape
             if (classSyntax.BaseList == null)
                 return new List<Relationship>();
 
-            return classSyntax.BaseList.Types.Select(t =>
+            var result = new List<Relationship>();
+
+            // members
+            foreach (var prop in classSyntax.Members.OfType<PropertyDeclarationSyntax>() )
             {
-                if (t is SimpleBaseTypeSyntax)
+                if (prop.Type is IdentifierNameSyntax)
+                {
+                    var r = new Relationship()
+                    {
+                        Source = node,
+                        TargetName = (prop.Type as IdentifierNameSyntax).Identifier.Text,
+                        Label = "depends"
+                    };
+                    result.Add(r);
+                }
+                // do something smart
+            }
+
+            classSyntax.BaseList.Types.ForEach(t =>
+            {
+                if (t is SimpleBaseTypeSyntax && t.Type is IdentifierNameSyntax)
                 {
                     var st = t as SimpleBaseTypeSyntax;
-                    return new Relationship()
+                    var r = new Relationship()
                     {
                         Source = node,
                         TargetName = (st.Type as IdentifierNameSyntax).Identifier.Text,
                         Label = "inherits"
                     };
+                    result.Add(r);
                 }
-                throw new Exception("Unsupport base type syntax");
-            }).ToList();
+                else
+                {
+                    throw new Exception("Unsupport base type syntax");
+                }
+            });
+
+            return result;
         }
     }
 }

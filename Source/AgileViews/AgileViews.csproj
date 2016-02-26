@@ -107,6 +107,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Export\Svg\EdgeStyle.cs" />
+    <Compile Include="Export\Svg\IEdgeStyle.cs" />
+    <Compile Include="Export\Svg\INodeStyle.cs" />
+    <Compile Include="Export\Svg\NodeStyle.cs" />
+    <Compile Include="Extensions\ExtensionsToEnumerable.cs" />
+    <Compile Include="Extensions\ExtentionsToView.cs" />
     <Compile Include="Scrape\Analyser.cs" />
     <Compile Include="Export\Svg\SvgWriter.cs" />
     <Compile Include="Export\Jekyll\Views\ElementListViewExporter.cs" />
@@ -136,7 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
