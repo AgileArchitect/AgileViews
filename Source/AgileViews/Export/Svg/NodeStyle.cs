@@ -23,5 +23,18 @@ namespace AgileViews.Export.Svg
             node.Attr.YRadius = Radius;
             node.Attr.LineWidth = BorderWidth;
         }
+
+        public NodeStyle Clone()
+        {
+            return new NodeStyle
+            {
+                Shape = this.Shape,
+                FillColor = this.FillColor,
+                BorderWidth = this.BorderWidth,
+                Margin = this.Margin,
+                BorderColor = this.BorderColor,
+                Radius = this.Radius
+            };
+        }
     }
 }

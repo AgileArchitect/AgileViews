@@ -6,6 +6,7 @@ using AgileViews.Model;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.FindSymbols;
 
 namespace AgileViews.Scrape
 {
@@ -18,7 +19,7 @@ namespace AgileViews.Scrape
     /// </summary>
     public class RoslynAnalyser
     {
-        public static Predicate<Project> ALL_PROJECTS = p => true;
+        private Dictionary<Project, Compilation> _compilations = new Dictionary<Project, Compilation>();
 
         private Solution _solution;
         public RoslynAnalyser(string solutionPath)
@@ -26,6 +27,16 @@ namespace AgileViews.Scrape
             var ws = Microsoft.CodeAnalysis.MSBuild.MSBuildWorkspace.Create();
             _solution = ws.OpenSolutionAsync(solutionPath).Result;
             var proj = _solution.Projects.Select(p => p.Name);
+        }
+
+        protected Compilation GetCompilation(Project project)
+        {
+            return null;
+        }
+
+        public ICollection<Element<Project>> Projects()
+        {
+            return Projects(p => true);
         }
 
         public ICollection<Element<Project>> Projects(Predicate<Project> predicate)
@@ -60,7 +71,7 @@ namespace AgileViews.Scrape
         /// <param name="projects"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<Element<SyntaxNode>> Classes(IEnumerable<Element<Project>> projects, Predicate<SyntaxNode> predicate)
+        public IEnumerable<Element<ClassDeclarationSyntax>> Classes(IEnumerable<Element<Project>> projects, Predicate<SyntaxNode> predicate)
         {
             foreach (var p in projects)
             {
@@ -68,8 +79,6 @@ namespace AgileViews.Scrape
 
                 foreach (var s in comp.SyntaxTrees)
                 {
-                    var sm = comp.GetSemanticModel(s);
-
                     foreach (
                         var decl in
                             s.GetRoot()
@@ -79,28 +88,61 @@ namespace AgileViews.Scrape
                     {
                         string name = decl.Identifier.Text;
 
-                        var cs = sm.GetDeclaredSymbol(decl);
-                        if (cs.GetAttributes().Any())
-                        {
-                            Console.WriteLine(".");
-                        }
-
-
                         if (decl.TypeParameterList != null)
                             name += decl.TypeParameterList.ToString();
 
-                            yield return new Element<SyntaxNode>()
+                        yield return new Element<ClassDeclarationSyntax>()
+                        {
+                            UserData = decl,
+                            Parent = p,
+                            Name = name
+                        };
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Element<ClassDeclarationSyntax>> GetClassesWithAttribute(IEnumerable<Element<Project>> projects, string attributeName)
+        {
+
+            foreach (var p in projects)
+            {
+                var comp = p.UserData.GetCompilationAsync().Result;
+
+                var type = comp.GetTypeByMetadataName(attributeName);
+                foreach (var tree in comp.SyntaxTrees)
+                {
+                    var sm = comp.GetSemanticModel(tree);
+                    // iterate the classes
+                    foreach (var decl in tree.GetRoot().DescendantNodesAndSelf().OfType<ClassDeclarationSyntax>())
+                    {
+                        var classModel = sm.GetDeclaredSymbol(decl);
+                        if (classModel.GetAttributes().Any(a => a.AttributeClass == type))
+                        {
+                            string name = decl.Identifier.Text;
+
+                            if (decl.TypeParameterList != null)
+                                name += decl.TypeParameterList.ToString();
+
+                            yield return new Element<ClassDeclarationSyntax>()
                             {
                                 UserData = decl,
                                 Parent = p,
                                 Name = name
                             };
+                        }
                     }
                 }
             }
         }
 
 
+        /// <summary>
+        /// Does not use semantic model
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public IEnumerable<Element<SyntaxNode>> Interfaces(IEnumerable<Element<Project>> projects, Predicate<SyntaxNode> predicate)
         {
             foreach (var p in projects)
@@ -132,12 +174,6 @@ namespace AgileViews.Scrape
             }
         }
 
-        //        public IEnumerable<Element<SyntaxNode>> Namespaces(IEnumerable<Element<Project>> projects,
-        //            Predicate<SyntaxNode> predicate)
-        //        {
-        //            return projects.Union(p => FromProject(p, sn => sn.Kind() == SyntaxKind.NamespaceDeclaration));
-        //        }
-
         private IEnumerable<Element<SyntaxNode>> FromProject(Project p, Predicate<SyntaxNode> selector, Element parent)
         {
             var comp = p.GetCompilationAsync().Result;
@@ -158,9 +194,9 @@ namespace AgileViews.Scrape
             return project.CompilationOptions.OutputKind == OutputKind.ConsoleApplication;
         }
 
-        public static ICollection<Relationship> RelationshipsFromClass(this Element<SyntaxNode> node)
+        public static ICollection<Relationship> RelationshipsFromClass(this Element<ClassDeclarationSyntax> node)
         {
-            var classSyntax = (node.UserData as ClassDeclarationSyntax);
+            var classSyntax = (node.UserData);
             if (classSyntax.BaseList == null)
                 return new List<Relationship>();
 

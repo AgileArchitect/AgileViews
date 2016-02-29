@@ -22,7 +22,6 @@ namespace AgileViews.Scrape
             _assembly = assembly;
         }
 
-
         public ICollection<Element<Type>> GetTypes()
         {
             return _assembly.GetTypes().Select(t => new Element<Type>()

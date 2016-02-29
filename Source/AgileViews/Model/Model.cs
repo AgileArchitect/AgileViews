@@ -6,6 +6,8 @@ using System.Runtime.Remoting;
 
 namespace AgileViews.Model
 {
+
+    [Rationale("Where model information is kept.")]
     public class Model
     {
         internal Model()

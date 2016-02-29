@@ -13,7 +13,7 @@ Task("Build")
 {
 	MSBuild(solution, s => {	
 		s.SetConfiguration(configuration)
-		 .WithProperty("TreatWarningsAsErrors", "True")
+		 //.WithProperty("TreatWarningsAsErrors", "True")
 		 .SetVerbosity(Verbosity.Quiet);
 	});
 });

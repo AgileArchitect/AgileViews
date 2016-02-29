@@ -4,6 +4,7 @@ using AgileViews.Export.Svg;
 using AgileViews.Extensions;
 using AgileViews.Model;
 using AgileViews.Scrape;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace AgileViews.Test
@@ -32,6 +33,8 @@ namespace AgileViews.Test
             model.AddAll(classes);
             model.AddAll(interfaces);
 
+            var attributed = analyzer.GetClassesWithAttribute(projects, "AgileViews.Model.Rationale").ToList();
+
             foreach (var c in classes)
             {
                 model.AddAll(c.RelationshipsFromClass());
@@ -41,7 +44,10 @@ namespace AgileViews.Test
 
             model.ElementByName("Element").Add(Information.URL, "http://www.google.nl");
 
-            var view = workspace.CreateView(projects.Single());
+            var view = workspace.CreateView(projects.Single(), "class");
+
+            ViewConfiguration.AddConfiguration("class", new ClassDiagramConfiguration());
+
             //view.AddChildren();
             view.AddEverythingRelatedTo(model.ElementByName("Element"));
 
@@ -50,26 +56,5 @@ namespace AgileViews.Test
             exporter.Export(view);
         }
 
-//        [Fact]
-//        public void TestExport()
-//        {
-//            var workspace = new Workspace();
-//
-//            var model = workspace.GetModel();
-//            var user = model.AddPerson("Employee Pharmacy", "An employee in a pharmacy", Location.External);
-//            var ncontrol = model.AddSystem("NControl", "Medication Related HealthCare System", Location.Internal);
-//            var ncasso = model.AddSystem("NCasso", "Healhcare Insurer Declaration Portal", Location.External);
-//
-//            user.Uses(ncontrol, "uses");
-//            ncontrol.Uses(ncasso, "uses");
-//
-//            var view = workspace.CreateContextView(ncontrol);
-//
-//            view.AddAllSystems();
-//            view.AddAllPeople();
-//
-//            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\AgileArchitect\Documentation\jekyll"));
-//            exporter.Export(view, new SvgExporter());
-//        }
     }
 }

@@ -12,18 +12,19 @@ namespace AgileViews.Model
     /// </summary>
     public class View
     {
-        public ViewType ViewType { get; set; }
+        public string ViewType { get; private set; }
 
          readonly IRelationshipStrategy _strategy;
         internal Model Model { get; set; }
 
         public Element Subject;
 
-        internal View(Element subject, IRelationshipStrategy strategy)
+        internal View(Element subject, IRelationshipStrategy strategy, string viewType)
         {
             _strategy = strategy;
             Subject = subject;
             Elements = new List<Element>();
+            ViewType = viewType;
         }
 
         public string Name => Subject.Name;

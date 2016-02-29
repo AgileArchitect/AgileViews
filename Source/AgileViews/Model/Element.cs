@@ -13,11 +13,6 @@ namespace AgileViews.Model
         {
             return Parent;
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj != null && obj == this;
-        }
     }
 
     public abstract class Element : Information

@@ -19,20 +19,6 @@ namespace AgileViews.Export.Svg
 {
     public class ViewToGraph
     {
-        private Action<Element, Node> _nodeDecorator = (e, n) =>
-        {
-            n.Attr.LabelMargin = 10;
-            n.Attr.Shape = Shape.Box;
-            n.Attr.XRadius = 0;
-            n.Attr.YRadius = 0;
-            n.Attr.LineWidth = 2;
-        };
-
-        private Action<Relationship, Edge> _edgeDecorator = (r, e) =>
-        {
-            e.Attr.ArrowheadAtTarget = ArrowStyle.Normal;
-        };
-
         public ViewToGraph()
         {
             
@@ -42,12 +28,14 @@ namespace AgileViews.Export.Svg
         {
             var graph = new Graph();
 
+            var c = ViewConfiguration.GetConfiguration(view);
+
             view.Elements.ToDictionary(e => e, e =>
             {
                 var node = graph.AddNode((string) e.Alias);
                 node.LabelText = e.Name.Replace("<", "&lt;").Replace(">", "&gt;");
                 node.Attr.Uri = e.GetInformation(Information.URL).FirstOrDefault();
-                _nodeDecorator(e,node);
+                c.GetStyle(e).Apply(node);
                 return node;
             });
 
@@ -58,10 +46,10 @@ namespace AgileViews.Export.Svg
                 {
                     edge.LabelText = rel.Label;
                 }
-                _edgeDecorator(rel,edge);
+                c.GetStyle(rel).Apply(edge);
             }
 
-            SetConsolasFontAndSize(graph, 11);
+//            SetConsolasFontAndSize(graph, 13);
 
             graph.LayoutAlgorithmSettings = PickLayoutAlgorithmSettings(graph.NodeCount, graph.EdgeCount);
 
