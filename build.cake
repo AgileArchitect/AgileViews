@@ -41,12 +41,12 @@ Task("Package")
 			Version                 = "0.1.2",
                                 Files                   = new [] 
 								{
-									new NuSpecContent {Source = "Source/AgileViews/bin/Release/AgileViews.dll", Target = "lib"},
-									new NuSpecContent {Source = "Libs/Microsoft.Msagl.dll", Target = "lib"},
-									new NuSpecContent {Source = "Libs/Microsoft.Msagl.Drawing.dll", Target = "lib"},
-									new NuSpecContent {Source = "Libs/Microsoft.Msagl.GraphViewerGdi.dll", Target = "lib"}
+									new NuSpecContent {Source = "AgileViews.dll", Target = "lib"},
+									new NuSpecContent {Source = "Microsoft.Msagl.dll", Target = "lib"},
+									new NuSpecContent {Source = "Microsoft.Msagl.Drawing.dll", Target = "lib"},
+									new NuSpecContent {Source = "Microsoft.Msagl.GraphViewerGdi.dll", Target = "lib"}
                                 },
-                                BasePath                = "./",
+                                BasePath                = "./Source/AgileViews/bin/Release",
                                 OutputDirectory         = "./nuget",
 								Verbosity				= NuGetVerbosity.Detailed
                             };
