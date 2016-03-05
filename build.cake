@@ -31,14 +31,14 @@ Task("Test")
  });
  
 Task("Package")
-	.IsDependentOn("Test")
+	.IsDependentOn("Build")
 	.Does(() => {
 		
 		CreateDirectory("nuget");
 		
 		var nuGetPackSettings   = new NuGetPackSettings 
 		{
-			Version                 = "0.1.2",
+			Version                 = "0.1.3",
                                 Files                   = new [] 
 								{
 									new NuSpecContent {Source = "AgileViews.dll", Target = "lib"},
