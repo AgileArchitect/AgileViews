@@ -35,6 +35,8 @@ namespace AgileViews.Test
 
             var attributed = analyzer.GetClassesWithAttribute(projects, "AgileViews.Model.Rationale").ToList();
 
+            new ScrapeClassAttribute().Scape(model, "rationale", "AgileViews.Model.Rationale", 0);
+
             foreach (var c in classes)
             {
                 model.AddAll(c.RelationshipsFromClass());

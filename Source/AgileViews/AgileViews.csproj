@@ -128,6 +128,7 @@
     <Compile Include="Export\Svg\SvgExporter.cs" />
     <Compile Include="Export\Svg\ViewToGraph.cs" />
     <Compile Include="Scrape\PackageAnalyser.cs" />
+    <Compile Include="Scrape\ScrapeClassAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
