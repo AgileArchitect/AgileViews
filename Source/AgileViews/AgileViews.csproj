@@ -95,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Export\JoinJs\JointJsExporter.cs" />
     <Compile Include="Export\Svg\EdgeStyle.cs" />
     <Compile Include="Export\Svg\IEdgeStyle.cs" />
     <Compile Include="Model\Rationale.cs" />

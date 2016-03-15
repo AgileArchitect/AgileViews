@@ -1,5 +1,6 @@
 using System.IO;
 using AgileViews.Export.Jekyll.Views;
+using AgileViews.Export.JoinJs;
 using AgileViews.Export.Svg;
 using AgileViews.Model;
 
@@ -45,7 +46,8 @@ namespace AgileViews.Export.Jekyll
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, new SvgExporter())
+                    //.AppendViewBlock(this, view, new SvgExporter())
+                    .AppendViewBlock(this, view, new JointJsExporter())
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 
