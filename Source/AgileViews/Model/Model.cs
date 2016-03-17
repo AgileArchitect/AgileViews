@@ -51,7 +51,10 @@ namespace AgileViews.Model
         public void ResolveNodes()
         {
             var doublesNames =
-                _elements.Select(e => e.Alias).GroupBy(e => e).Where(g => g.Count() > 1).Select(g => g.Key);
+                _elements.Select(e => e.Name).GroupBy(e => e).Where(g => g.Count() > 1).ToDictionary(g => g.Key, g => g.ToList());
+
+            var doubles = _elements.Where(e => doublesNames.ContainsKey(e.Name)).ToList();
+
             if (doublesNames.Any())
             {
                 throw new ArgumentException("You have double names");

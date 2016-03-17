@@ -15,6 +15,11 @@ namespace AgileViews.Model
         }
     }
 
+    public class Element<T1, T2> : Element<T1>
+    {
+        public T2 UserData2 { get; set; }
+    }
+
     public abstract class Element : Information
     {
         private Guid _guid = Guid.NewGuid();

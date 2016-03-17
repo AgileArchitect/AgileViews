@@ -39,9 +39,9 @@ namespace AgileViews.Scrape
             return Projects(p => true);
         }
 
-        public ICollection<Element<Project>> Projects(Predicate<Project> predicate)
+        public ICollection<Element<Project>> Projects(Predicate<Project> predicate, Element parent = null)
         {
-            return _solution.Projects.Where(p => predicate(p)).Select(p => new Element<Project> {UserData = p, Name = p.Name}).ToList();
+            return _solution.Projects.Where(p => predicate(p)).Select(p => new Element<Project> {UserData = p, Name = p.Name, Parent = parent}).ToList();
         }
 
         public ICollection<Relationship> GetProjectDependencies(IEnumerable<Element<Project>> projects)
@@ -71,7 +71,7 @@ namespace AgileViews.Scrape
         /// <param name="projects"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<Element<ClassDeclarationSyntax>> Classes(IEnumerable<Element<Project>> projects, Predicate<SyntaxNode> predicate)
+        public IEnumerable<Element<INamedTypeSymbol>> Classes(IEnumerable<Element<Project>> projects, Predicate<SyntaxNode> predicate)
         {
             foreach (var p in projects)
             {
@@ -79,6 +79,8 @@ namespace AgileViews.Scrape
 
                 foreach (var s in comp.SyntaxTrees)
                 {
+                    var semantic = comp.GetSemanticModel(s);
+
                     foreach (
                         var decl in
                             s.GetRoot()
@@ -86,14 +88,18 @@ namespace AgileViews.Scrape
                                 .OfType<ClassDeclarationSyntax>()
                                 .Where(x => predicate(x)))
                     {
-                        string name = decl.Identifier.Text;
+                        var classModel = semantic.GetDeclaredSymbol(decl);
+
+                        string name = classModel.GetQualifiedName();
 
                         if (decl.TypeParameterList != null)
                             name += decl.TypeParameterList.ToString();
 
-                        yield return new Element<ClassDeclarationSyntax>()
+
+
+                        yield return new Element<INamedTypeSymbol>()
                         {
-                            UserData = decl,
+                            UserData = classModel,
                             Parent = p,
                             Name = name
                         };
@@ -119,7 +125,7 @@ namespace AgileViews.Scrape
                         var classModel = sm.GetDeclaredSymbol(decl);
                         if (classModel.GetAttributes().Any(a => a.AttributeClass == type))
                         {
-                            string name = decl.Identifier.Text;
+                            string name = classModel.GetQualifiedName();
 
                             if (decl.TypeParameterList != null)
                                 name += decl.TypeParameterList.ToString();
@@ -151,6 +157,7 @@ namespace AgileViews.Scrape
 
                 foreach (var s in comp.SyntaxTrees)
                 {
+                    var semantic = comp.GetSemanticModel(s);
                     foreach (
                         var decl in
                             s.GetRoot()
@@ -158,7 +165,9 @@ namespace AgileViews.Scrape
                                 .OfType<InterfaceDeclarationSyntax>()
                                 .Where(x => predicate(x)))
                     {
-                        string name = decl.Identifier.Text;
+                        var interfaceModel = semantic.GetDeclaredSymbol(decl);
+
+                        string name = interfaceModel.GetQualifiedName();
 
                         if (decl.TypeParameterList != null)
                             name += decl.TypeParameterList.ToString();
@@ -194,50 +203,82 @@ namespace AgileViews.Scrape
             return project.CompilationOptions.OutputKind == OutputKind.ConsoleApplication;
         }
 
-        public static ICollection<Relationship> RelationshipsFromClass(this Element<ClassDeclarationSyntax> node)
+        public static ICollection<Relationship> RelationshipsFromClass(this Element<INamedTypeSymbol> node)
         {
-            var classSyntax = (node.UserData);
-            if (classSyntax.BaseList == null)
-                return new List<Relationship>();
-
             var result = new List<Relationship>();
+            var baseList = new List<INamedTypeSymbol>();
+            baseList.AddRange(node.UserData.Interfaces);
+            baseList.Add(node.UserData.BaseType);
 
-            // members
-            foreach (var prop in classSyntax.Members.OfType<PropertyDeclarationSyntax>() )
+            var members = node.UserData.GetMembers().Where(m => m.Kind == SymbolKind.Property);
+
+            foreach (var b in baseList)
             {
-                if (prop.Type is IdentifierNameSyntax)
+                result.Add(new Relationship
                 {
-                    var r = new Relationship()
-                    {
-                        Source = node,
-                        TargetName = (prop.Type as IdentifierNameSyntax).Identifier.Text,
-                        Label = "depends"
-                    };
-                    result.Add(r);
-                }
-                // do something smart
+                    Source = node,
+                    TargetName = b.GetQualifiedName(),
+                    Label = "inherits"
+                });
             }
 
-            classSyntax.BaseList.Types.ForEach(t =>
-            {
-                if (t is SimpleBaseTypeSyntax && t.Type is IdentifierNameSyntax)
-                {
-                    var st = t as SimpleBaseTypeSyntax;
-                    var r = new Relationship()
-                    {
-                        Source = node,
-                        TargetName = (st.Type as IdentifierNameSyntax).Identifier.Text,
-                        Label = "inherits"
-                    };
-                    result.Add(r);
-                }
-                else
-                {
-                    throw new Exception("Unsupport base type syntax");
-                }
-            });
-
             return result;
+
+//            return new Relationship[] {};
+//            if (classSyntax.BaseList == null)
+//                return new List<Relationship>();
+//
+
+//
+//            // members
+//            foreach (var prop in classSyntax.Members.OfType<PropertyDeclarationSyntax>() )
+//            {
+//                if (prop.Type is IdentifierNameSyntax)
+//                {
+//                    var r = new Relationship()
+//                    {
+//                        Source = node,
+//                        TargetName = (prop.Type as IdentifierNameSyntax).Identifier.Text,
+//                        Label = "depends"
+//                    };
+//                    result.Add(r);
+//                }
+//                // do something smart
+//            }
+//
+//            classSyntax.BaseList.Types.ForEach(t =>
+//            {
+//                if (t is SimpleBaseTypeSyntax && t.Type is IdentifierNameSyntax)
+//                {
+//                    var st = t as SimpleBaseTypeSyntax;
+//                    var r = new Relationship()
+//                    {
+//                        Source = node,
+//                        TargetName = (st.Type as IdentifierNameSyntax).Identifier.Text,
+//                        Label = "inherits"
+//                    };
+//                    result.Add(r);
+//                }
+//                else
+//                {
+//                    //throw new Exception("Unsupport base type syntax");
+//                }
+//            });
+//
+//            return result;
         }
+    }
+
+    public static class ExtensionsToSymbol
+    {
+        public static string GetQualifiedName(this ISymbol symbol)
+        {
+            if (symbol.ContainingSymbol != null) //&& symbol.ContainingSymbol.ContainingSymbol != null && symbol.ContainingSymbol.ContainingSymbol is INamespaceSymbol)
+            {
+                return symbol.ContainingSymbol.GetQualifiedName() + "." + symbol.Name;
+            }
+            return symbol.Name;
+        }
+
     }
 }
