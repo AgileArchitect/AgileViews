@@ -22,8 +22,6 @@ namespace AgileViews.Test
             // act
             var projects = analyzer.Projects(p => p.Name.Contains("Agile") && !p.Name.Contains("Test"));
             var system = new Element<string>() { Name = "System " };
-            var projects = analyzer.Projects(p => !p.Name.Contains("Test"));
-
 
             var workspace = new Workspace();
 
