@@ -45,7 +45,7 @@ namespace AgileViews.Export.Jekyll
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, new SvgExporter())
+                    .AppendViewBlock(this, view, new PngExporter())// SvgExporter())
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 
