@@ -11,11 +11,11 @@ namespace AgileViews.Export.Jekyll
             return writer;
         }
 
-        public static StreamWriter AppendViewBlock(this StreamWriter writer, JekyllExporter exporter, View view, IJekyllViewExporter viewExporter)
+        public static StreamWriter AppendViewBlock(this StreamWriter writer, JekyllExporter exporter, View view,
+            IJekyllViewExporter viewExporter)
         {
             viewExporter.Export(exporter, view, writer);
             return writer;
         }
-
     }
 }

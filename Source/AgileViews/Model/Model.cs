@@ -2,31 +2,28 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Remoting;
 
 namespace AgileViews.Model
 {
-
     [Rationale("Where model information is kept.")]
     public class Model
     {
+        private readonly List<Element> _elements = new List<Element>();
+
+        private readonly List<Relationship> _relationships = new List<Relationship>();
+
         internal Model()
         {
-            
         }
+
+        public IReadOnlyCollection<Relationship> Relationships => new ReadOnlyCollection<Relationship>(_relationships);
+
+        public IReadOnlyCollection<Element> Elements => new ReadOnlyCollection<Element>(_elements);
 
         public Element ElementByName(string name)
         {
             return _elements.SingleOrDefault(e => e.Name == name);
         }
-
-        private readonly List<Element> _elements = new List<Element>();
-
-        private readonly List<Relationship> _relationships = new List<Relationship>();
-
-        public IReadOnlyCollection<Relationship> Relationships => new ReadOnlyCollection<Relationship>(_relationships);
-
-        public IReadOnlyCollection<Element> Elements => new ReadOnlyCollection<Element>(_elements);
 
         public void AddAll(IEnumerable<Element> elements)
         {
@@ -51,7 +48,10 @@ namespace AgileViews.Model
         public void ResolveNodes()
         {
             var doublesNames =
-                _elements.Select(e => e.Name).GroupBy(e => e).Where(g => g.Count() > 1).ToDictionary(g => g.Key, g => g.ToList());
+                _elements.Select(e => e.Name)
+                    .GroupBy(e => e)
+                    .Where(g => g.Count() > 1)
+                    .ToDictionary(g => g.Key, g => g.ToList());
 
             var doubles = _elements.Where(e => doublesNames.ContainsKey(e.Name)).ToList();
 
@@ -73,7 +73,7 @@ namespace AgileViews.Model
 
         internal Relationship AddRelationship(Element source, Element target, string description)
         {
-            var relationship = new Relationship()
+            var relationship = new Relationship
             {
                 Source = source,
                 Target = target,
@@ -84,6 +84,5 @@ namespace AgileViews.Model
 
             return relationship;
         }
-
     }
 }

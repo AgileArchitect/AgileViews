@@ -5,17 +5,15 @@ using System.Linq;
 namespace AgileViews.Model
 {
     /// <summary>
-    /// We want different kinds of views
-    /// - A softwareSystem and its context (systems and users)
-    /// - The internals of a softwaresystem (components), with or without relations to externals systems and users
-    /// - The internals of a component (subcomponents, classes, etc, messages), with or without relations to external componenets
+    ///     We want different kinds of views
+    ///     - A softwareSystem and its context (systems and users)
+    ///     - The internals of a softwaresystem (components), with or without relations to externals systems and users
+    ///     - The internals of a component (subcomponents, classes, etc, messages), with or without relations to external
+    ///     componenets
     /// </summary>
     public class View
     {
-        public string ViewType { get; private set; }
-
-         readonly IRelationshipStrategy _strategy;
-        internal Model Model { get; set; }
+        private readonly IRelationshipStrategy _strategy;
 
         public Element Subject;
 
@@ -26,6 +24,9 @@ namespace AgileViews.Model
             Elements = new List<Element>();
             ViewType = viewType;
         }
+
+        public string ViewType { get; private set; }
+        internal Model Model { get; set; }
 
         public string Name => Subject.Name;
 
@@ -40,7 +41,7 @@ namespace AgileViews.Model
         {
             foreach (var e in Model.Elements.Where(selector))
             {
-                if( !Elements.Contains(e))
+                if (!Elements.Contains(e))
                     Elements.Add(e);
             }
         }

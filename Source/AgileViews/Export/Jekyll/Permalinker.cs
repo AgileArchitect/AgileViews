@@ -11,7 +11,7 @@ namespace AgileViews.Export.Jekyll
 
         public static string GetPermalink(ViewType viewType, Element element)
         {
-            return $"/{viewType.ToString().ToLower()}/{element.Alias.ToLower()}";
+            return $"/{viewType.ToString().ToLower()}/{element.Alias.ToLower()}/";
         }
     }
 }
