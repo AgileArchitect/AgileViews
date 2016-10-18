@@ -7,12 +7,7 @@ namespace AgileViews.Export.Jekyll.Views
     {
         protected override string Header()
         {
-            return @"
-### Elements
-
-|-------------+----------------|
-| Name        | Description    |
-|-------------|----------------|";
+            return "### Elements";
         }
 
         protected override string ExportElement(Element element)
@@ -23,9 +18,9 @@ namespace AgileViews.Export.Jekyll.Views
 
             if (!url.Any())
             {
-                return $"| **{name}** | {description} |";
+                return $"* **{name}**: {description}";
             }
-            return $"| **[{name}]({url.First()})** | {description} |";
+            return $"* **[{name}]({url.First()})**: {description}";
         }
 
 

@@ -14,21 +14,19 @@ namespace AgileViews.Test
     public class AnalyserTest
     {
         [Fact]
-        public void FoundProjects()
+        public static void Main()
         {
-            var path = Path.GetFullPath(@"..\..\..\..\..\..\..\Libs\NCore\src\NCore.sln");
+            var path = Path.GetFullPath(@"..\..\..\AgileViews.sln");
             // arrange
             var analyzer = new RoslynAnalyser(path);
 
             // act
             var projects = analyzer.Projects(p => true);
-            var system = new Element<string>() { Name = "System " };
 
-            var workspace = new Workspace();
+            var workspace = new Workspace("AgileViews");
 
             var model = workspace.GetModel();
 
-            model.Add(system);
             model.AddAll(projects);
             model.AddAll(analyzer.GetProjectDependencies(projects));
 
@@ -55,25 +53,17 @@ namespace AgileViews.Test
                 element.Add(Information.URL, "http://www.google.nl");
             }
 
-            var view = workspace.CreateView(system, "package");
+            var view = workspace.CreateView(new Element<string> { Name = "AgileViews" }, ViewType.Classes);
             view.AddElements(e => e is Element<Project>);
             view.AddEverythingRelatedTo(model.ElementByName("Element"));
 
             foreach (var p in projects)
             {
-                var v = workspace.CreateView(p, "class");
+                var v = workspace.CreateView(p, ViewType.Classes);
                 v.AddElements(e => e.GetParent() == p);
             }
 
-            // assert
-            var exporter = new JekyllExporter(new JekyllExporterConfiguration(@"D:\Projects\Private\AgileArchitect\Documentation\JekyllSite"));
-            
-
-            foreach (var v in workspace.Set.Views)
-            {
-                exporter.Export(v);
-            }
-
+            workspace.Export(@"D:\Projects\Private\AgileArchitect\Documentation\JekyllSite");
         }
 
     }

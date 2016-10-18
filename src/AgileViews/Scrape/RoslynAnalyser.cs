@@ -43,7 +43,7 @@ namespace AgileViews.Scrape
         {
             return
                 _solution.Projects.Where(p => predicate(p))
-                    .Select(p => new Element<Project>(p.Name) {UserData = p, Parent = parent})
+                    .Select(p => new Element<Project> {UserData = p, Name = p.Name, Parent = parent})
                     .ToList();
         }
 
@@ -73,10 +73,10 @@ namespace AgileViews.Scrape
         ///     Yields classes and interfaces
         /// </summary>
         /// <param name="projects"></param>
-        /// <param name="syntaxPredicate"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
         public IEnumerable<Element<INamedTypeSymbol>> Classes(IEnumerable<Element<Project>> projects,
-            Predicate<ClassDeclarationSyntax> syntaxPredicate, Predicate<INamedTypeSymbol> semanticPredicate)
+            Predicate<SyntaxNode> predicate)
         {
             foreach (var p in projects)
             {
@@ -91,22 +91,22 @@ namespace AgileViews.Scrape
                             s.GetRoot()
                                 .DescendantNodesAndSelf()
                                 .OfType<ClassDeclarationSyntax>()
-                                .Where(x => syntaxPredicate(x)))
+                                .Where(x => predicate(x)))
                     {
                         var classModel = semantic.GetDeclaredSymbol(decl);
-
-                        if (!semanticPredicate(classModel))
-                            continue;
 
                         var name = classModel.GetQualifiedName();
 
                         if (decl.TypeParameterList != null)
                             name += decl.TypeParameterList.ToString();
 
-                        yield return new Element<INamedTypeSymbol>(name)
+
+                        yield return new Element<INamedTypeSymbol>
                         {
                             UserData = classModel,
-                            Parent = p
+                            Parent = p,
+                            Name = classModel.Name,
+                            QualifiedName = name
                         };
                     }
                 }
@@ -135,10 +135,11 @@ namespace AgileViews.Scrape
                             if (decl.TypeParameterList != null)
                                 name += decl.TypeParameterList.ToString();
 
-                            yield return new Element<ClassDeclarationSyntax>(name)
+                            yield return new Element<ClassDeclarationSyntax>
                             {
                                 UserData = decl,
-                                Parent = p
+                                Parent = p,
+                                Name = name
                             };
                         }
                     }
@@ -177,12 +178,25 @@ namespace AgileViews.Scrape
                         if (decl.TypeParameterList != null)
                             name += decl.TypeParameterList.ToString();
 
-                        yield return new Element<SyntaxNode>(name)
+                        yield return new Element<SyntaxNode>
                         {
                             UserData = decl,
-                            Parent = p
+                            Parent = p,
+                            Name = name
                         };
                     }
+                }
+            }
+        }
+
+        private IEnumerable<Element<SyntaxNode>> FromProject(Project p, Predicate<SyntaxNode> selector, Element parent)
+        {
+            var comp = p.GetCompilationAsync().Result;
+            foreach (var s in comp.SyntaxTrees)
+            {
+                foreach (var decl in s.GetRoot().DescendantNodesAndSelf().Where(x => selector(x)))
+                {
+                    yield return new Element<SyntaxNode> {UserData = decl, Parent = parent};
                 }
             }
         }

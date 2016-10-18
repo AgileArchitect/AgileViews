@@ -67,7 +67,7 @@ namespace AgileViews.Model
         {
             AddElements(e =>
             {
-                var parent = e.GetInformation("Parent");
+                var parent = e.GetParent();
                 var equality = parent != null && parent.Equals(Subject);
                 return equality;
             });

@@ -3,39 +3,31 @@ using System.Diagnostics;
 
 namespace AgileViews.Model
 {
-    [DebuggerDisplay("{QualifiedName}")]
+    [DebuggerDisplay("{UserData}")]
     public class Element<T> : Element
     {
-        public Element(string name) : base(name)
-        {
-            
-        }
-
         public Element Parent { get; set; }
 
         public T UserData { get; set; }
+
+        public override Element GetParent()
+        {
+            return Parent;
+        }
 
     }
 
     public class Element<T1, T2> : Element<T1>
     {
-        public Element(string name) : base(name)
-        {
-
-        }
-
         public T2 UserData2 { get; set; }
     }
 
-    public class Element : Information
+    public abstract class Element : Information
     {
         private Guid _guid = Guid.NewGuid();
-        private string _name;
 
-        public Element(string name)
+        internal Element()
         {
-            Name = name;
-            QualifiedName = name;
         }
 
         public Model Model { get; set; }
@@ -43,11 +35,7 @@ namespace AgileViews.Model
         /// <summary>
         ///     Element name which will be displayed in diagrams
         /// </summary>
-        public string Name
-        {
-            get { return _name ?? string.Empty; }
-            set { _name = value; }
-        }
+        public string Name { get; set; }
 
         public string QualifiedName { get; set; }
 
@@ -58,7 +46,7 @@ namespace AgileViews.Model
 
         public string Alias => QualifiedName.Replace(" ", "");
 
-//        public Element GetParent();
+        public abstract Element GetParent();
 
         public Relationship Uses(Element target, string description)
         {

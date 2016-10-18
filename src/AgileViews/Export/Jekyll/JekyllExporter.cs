@@ -37,13 +37,12 @@ namespace AgileViews.Export.Jekyll
                 writer.WriteLine("layout: page");
                 writer.WriteLine($"title: {view.Name}");
                 writer.WriteLine($"permalink: {_configuration.Permalink(view)}");
-                writer.WriteLine($"type: {view.ViewType.ToString().ToLowerInvariant()}");
-                writer.WriteLine($"tags: [view, {view.Name}]");
+                writer.WriteLine($"tags: [generated, {view.ViewType.ToString().ToLowerInvariant()}, diagram, {view.Name}]");
                 writer.WriteLine("---");
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, new XGraphVizExporter())
+                    .AppendViewBlock(this, view, new CytoScapeExporter())
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 

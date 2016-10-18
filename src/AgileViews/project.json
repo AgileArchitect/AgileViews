@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+  "frameworks": {
+    "netstandard1.3": {
+    }
+  },
+  "dependencies": {
+    "NETStandard.Library": "1.6.0"
+  }
+}

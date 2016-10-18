@@ -22,7 +22,7 @@ namespace AgileViews.Scrape
 
         public ICollection<Element<Type>> GetTypes()
         {
-            return _assembly.GetTypes().Select(t => new Element<Type>(t.FullName)
+            return _assembly.GetTypes().Select(t => new Element<Type>
             {
                 Name = t.Name,
                 UserData = t

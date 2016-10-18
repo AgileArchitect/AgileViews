@@ -32,7 +32,6 @@ namespace AgileViews.Model
 
         public void Add(Element element)
         {
-            element.Model = this;
             _elements.Add(element);
         }
 
