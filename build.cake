@@ -31,7 +31,7 @@ Task("Release")
 
 Task("Build")
   .Does(() => {
-	DotNetCoreRestore()​;
+	DotNetCoreRestore();
 	DotNetCoreBuild("./src/AgileViews", settings);
   });
 
