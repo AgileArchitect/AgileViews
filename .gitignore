@@ -33,3 +33,5 @@ Tools/*
 !Tools/packages.config
 nuget/*
 artifacts/*
+.vs/*
+*.lock.json

@@ -1,4 +1,4 @@
-#tool "xunit.runner.console"
+﻿#tool "xunit.runner.console"
 
 var target = Argument("target", "Build");
 var configuration = Argument("configuration", "Release");
@@ -31,6 +31,7 @@ Task("Release")
 
 Task("Build")
   .Does(() => {
+	DotNetCoreRestore()​;
 	DotNetCoreBuild("./src/AgileViews", settings);
   });
 
