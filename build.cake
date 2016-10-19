@@ -45,12 +45,15 @@ Task("Test")
 Task("Pack")
   .IsDependentOn("Test")
   .Does(() => {
+	var versionSuffix = EnvironmentVariable("APPVEYOR_BUILD_NUMBER");
+
     var s = new DotNetCorePackSettings
-	{
-		Configuration = "Release",
-		OutputDirectory = "./artifacts/"
-	};
-	DotNetCorePack("./src/AgileViews", s);
+		{
+			Configuration = "Release",
+			OutputDirectory = "./artifacts/",
+			VersionSuffix = versionSuffix
+		};
+		DotNetCorePack("./src/AgileViews", s);
   });
 
 Task("Restore-NuGet-Packages")
