@@ -22,7 +22,7 @@ namespace AgileViews.Model
 
         public Element ElementByName(string name)
         {
-            return _elements.SingleOrDefault(e => e.Name == name);
+            return _elements.SingleOrDefault(e => e.QualifiedName == name);
         }
 
         public void AddAll(IEnumerable<Element> elements)
@@ -32,6 +32,7 @@ namespace AgileViews.Model
 
         public void Add(Element element)
         {
+            element.Model = this;
             _elements.Add(element);
         }
 
@@ -48,7 +49,7 @@ namespace AgileViews.Model
         public void ResolveNodes()
         {
             var doublesNames =
-                _elements.Select(e => e.Name)
+                _elements.Select(e => e.QualifiedName)
                     .GroupBy(e => e)
                     .Where(g => g.Count() > 1)
                     .ToDictionary(g => g.Key, g => g.ToList());

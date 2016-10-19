@@ -1,52 +1,76 @@
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AgileViews.Model
 {
-    [DebuggerDisplay("{UserData}")]
+    public class StringLabel : ILabel
+    {
+        private readonly string _label;
+
+        public StringLabel(string label)
+        {
+            _label = label;
+        }
+
+        public string Name { get { return _label; } }
+
+        public string QualifiedName
+        {
+            get { return _label; }
+        }
+
+        public static implicit operator StringLabel(string name)
+        {
+            StringLabel l = new StringLabel(name);
+            return l;
+        }
+    }
+
+    public interface ILabel
+    {
+        string Name { get; }
+        string QualifiedName { get; }
+    }
+
+    [DebuggerDisplay("{QualifiedName}")]
     public class Element<T> : Element
     {
-        public Element Parent { get; set; }
+        public Element(ILabel label) : base(label)
+        {
+        }
 
         public T UserData { get; set; }
 
-        public override Element GetParent()
-        {
-            return Parent;
-        }
-
     }
 
-    public class Element<T1, T2> : Element<T1>
+    public class Element : Information
     {
-        public T2 UserData2 { get; set; }
-    }
-
-    public abstract class Element : Information
-    {
+        private readonly ILabel _label;
         private Guid _guid = Guid.NewGuid();
+        private string _name;
 
-        internal Element()
+        public Element(ILabel label)
         {
+            _label = label;
         }
+
+        /// <summary>
+        /// This is more of an alias or displayname.
+        /// </summary>
+        public string Name => _label.Name;
+
+        /// <summary>
+        /// Name we will use to identify and search for elements.
+        /// </summary>
+        public string QualifiedName => _label.QualifiedName;
 
         public Model Model { get; set; }
 
-        /// <summary>
-        ///     Element name which will be displayed in diagrams
-        /// </summary>
-        public string Name { get; set; }
-
-        public string QualifiedName { get; set; }
-
-        /// <summary>
-        ///     Longer description of the element, which can be added in notes or underneath diagrams.
-        /// </summary>
-        public string Description { get; set; }
 
         public string Alias => QualifiedName.Replace(" ", "");
 
-        public abstract Element GetParent();
+//        public Element GetParent();
 
         public Relationship Uses(Element target, string description)
         {

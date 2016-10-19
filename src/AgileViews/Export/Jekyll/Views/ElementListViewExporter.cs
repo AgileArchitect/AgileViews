@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text;
 using AgileViews.Model;
 
 namespace AgileViews.Export.Jekyll.Views
@@ -7,20 +8,33 @@ namespace AgileViews.Export.Jekyll.Views
     {
         protected override string Header()
         {
-            return "### Elements";
+            return @"
+### Elements
+
+|-------------+----------------+----------------|
+| Name        | Attribute      | Value          |
+|-------------|----------------+----------------|";
         }
 
         protected override string ExportElement(Element element)
         {
-            var name = element.Name;
-            var description = element.Description;
-            var url = element.GetInformation(Information.URL);
+            var sb = new StringBuilder();
 
-            if (!url.Any())
+            var name = element.Name;
+            var descriptions = element.GetInformation(Information.Description);
+            var urls = element.GetInformation(Information.Url);
+
+            foreach (var value in descriptions)
             {
-                return $"* **{name}**: {description}";
+                sb.AppendLine($"| **{name}** | Description | {value} |");
             }
-            return $"* **[{name}]({url.First()})**: {description}";
+
+            foreach (var url in urls)
+            {
+                sb.AppendLine($"| **{name}** | Url | **[{url}]({url})** |");
+            }
+
+            return sb.ToString();
         }
 
 

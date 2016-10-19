@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AgileViews", "src\AgileViews\AgileViews.xproj", "{1F4E4178-EA59-4FBB-9F2C-98E7B50BEC73}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47ADC1C7-14D3-4417-887A-30B64CA2C4BE}"
+	ProjectSection(SolutionItems) = preProject
+		build.cake = build.cake
+		global.json = global.json
+		Tools\packages.config = Tools\packages.config
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AgileViews.Tests", "test\AgileViews.Tests\AgileViews.Tests.xproj", "{C80D0A27-2060-40C1-BF43-385EA928E22E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1F4E4178-EA59-4FBB-9F2C-98E7B50BEC73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F4E4178-EA59-4FBB-9F2C-98E7B50BEC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F4E4178-EA59-4FBB-9F2C-98E7B50BEC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F4E4178-EA59-4FBB-9F2C-98E7B50BEC73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C80D0A27-2060-40C1-BF43-385EA928E22E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C80D0A27-2060-40C1-BF43-385EA928E22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C80D0A27-2060-40C1-BF43-385EA928E22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C80D0A27-2060-40C1-BF43-385EA928E22E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

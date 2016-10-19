@@ -7,7 +7,7 @@ var solution = "./Source/AgileViews.sln";
 var project =  "./Source/AgileViews/AgileViews.csproj";
 var nuspec =  "./nuspec/AgileViews.nuspec";
 
-Task("Build")
+Task("Build46")
 	.IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
@@ -18,13 +18,47 @@ Task("Build")
 	});
 });
 
+var settings = new DotNetCoreBuildSettings
+	{
+		Framework = "netstandard1.3",
+		Configuration = "Debug"
+	};
+
+Task("Release")
+.Does(() => {
+	settings.Configuration = "Release";
+});
+
+Task("Build")
+  .Does(() => {
+	DotNetCoreBuild("./src/AgileViews", settings);
+  });
+
+Task("Test")
+  .IsDependentOn("Build")
+  .Does(() => {
+    DotNetCoreBuild("./test/AgileViews.Tests");
+	DotNetCoreTest("./test/AgileViews.Tests");
+  });
+
+Task("Pack")
+  .IsDependentOn("Test")
+  .Does(() => {
+    var s = new DotNetCorePackSettings
+	{
+		Configuration = "Release",
+		OutputDirectory = "./artifacts/"
+	};
+	DotNetCorePack("./src/AgileViews", s);
+  });
+
 Task("Restore-NuGet-Packages")
     .Does(() =>
 {
     NuGetRestore(solution);
 });
 
-Task("Test")
+Task("Test46")
  .IsDependentOn("Build")
  .Does(() => {
 	XUnit2("Source/AgileViews.Test/bin/Release/*.Test.dll");

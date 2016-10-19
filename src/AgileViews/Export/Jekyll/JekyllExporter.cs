@@ -1,6 +1,5 @@
 using System.IO;
 using AgileViews.Export.Jekyll.Views;
-using AgileViews.Export.JoinJs;
 using AgileViews.Model;
 
 namespace AgileViews.Export.Jekyll
@@ -31,23 +30,24 @@ namespace AgileViews.Export.Jekyll
 
             Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-            using (var writer = new StreamWriter(path))
+            using (var stream = new FileStream(path, FileMode.Create))
+            using (var writer = new StreamWriter(stream))
             {
                 writer.WriteLine("---");
                 writer.WriteLine("layout: page");
                 writer.WriteLine($"title: {view.Name}");
                 writer.WriteLine($"permalink: {_configuration.Permalink(view)}");
-                writer.WriteLine($"tags: [generated, {view.ViewType.ToString().ToLowerInvariant()}, diagram, {view.Name}]");
+                writer.WriteLine($"type: {view.ViewType.ToString().ToLowerInvariant()}");
+                writer.WriteLine($"tags: [view, {view.Name}]");
                 writer.WriteLine("---");
                 // export the image
 
                 writer
-                    .AppendViewBlock(this, view, new CytoScapeExporter())
+                    .AppendViewBlock(this, view, new XGraphVizExporter.XGraphVizExporter())
                     .EmptyLine()
                     .AppendViewBlock(this, view, new ElementListViewExporter());
 
                 writer.Flush();
-                writer.Close();
             }
         }
     }

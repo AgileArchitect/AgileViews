@@ -10,11 +10,11 @@ namespace AgileViews.Export.Jekyll.Views
             writer.WriteLine(Header());
             foreach (var element in view.Elements)
             {
-                writer.WriteLine(ExportElement(element));
+                writer.Write(ExportElement(element));
             }
             foreach (var relation in view.Relationships)
             {
-                writer.WriteLine(ExportRelationship(relation));
+                writer.Write(ExportRelationship(relation));
             }
             writer.WriteLine(Footer());
         }
