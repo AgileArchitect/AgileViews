@@ -32,3 +32,4 @@ Source/packages
 Tools/*
 !Tools/packages.config
 nuget/*
+artifacts/*
