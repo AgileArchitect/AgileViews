@@ -1,4 +1,7 @@
 # AgileViews
+
+![Master Status](https://ci.appveyor.com/api/projects/status/github/AgileArchitect/AgileViews?svg=true)
+
 Generate architecture documentation from definition and code, and compare!
 
 * Keep your architecture documentation up-to-date
@@ -17,4 +20,23 @@ Output
 * Inline SVG (layouted using MSAGL)
 * ... ?
 
-![AppVeyor](https://img.shields.io/appveyor/ci/tomstaijen/agileviews.svg)
+
+# Sample
+
+```c#
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            var workspace = new Workspace("Hi");
+            var model = workspace.GetModel();
+
+            new ReflectionProcessor().Default().Process(typeof(Program).Assembly, model);
+
+            workspace.CreateView(model.ElementByName(typeof (Program).FullName), ViewType.Classes);
+
+            workspace.Export(".");
+        }
+    }
+```
+
