@@ -29,11 +29,11 @@ namespace AgileViews.Commons
 
     public class Event : Message
     {
-        public static string Kind = typeof(Event).Kind();
+        public new static string Kind = typeof(Event).Kind();
     }
 
     public class Command : Message
     {
-        public static string Kind = typeof(Command).Kind();
+        public new static string Kind = typeof(Command).Kind();
     }
 }
