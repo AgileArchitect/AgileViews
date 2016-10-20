@@ -10,5 +10,12 @@
         "NETStandard.Library": "1.6.0"
       }
     }
-  }
+  },
+  "packOptions": {
+    "summary": "Generate architecture documentation from (4GL) definition and code, and compare!.",
+    "tags": [ "uml", "generate", "views", "agile", "architect", "c#", "living", "technical", "documentation" ],
+    "projectUrl": "https://github.com/AgileArchitect/AgileViews",
+    "licenseUrl": "https://opensource.org/licenses/MIT"
+  },
+  "authors" :  [ "Tom Staijen"]
 }
