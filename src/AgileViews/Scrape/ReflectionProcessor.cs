@@ -24,7 +24,10 @@ namespace AgileViews.Scrape
     public class ReflectionProcessor
     {
         public Func<Type,ILabel> TypeLabeler = t => new TypeLabel(t);
+
         public Func<PropertyInfo, ILabel> PropertyLabeler = p => new StringLabel(p.Name);
+
+        public Predicate<Type> InclusionFilter = t => true;
 
         public ReflectionProcessor(Action<ReflectionProcessor> config)
         {
@@ -105,7 +108,7 @@ namespace AgileViews.Scrape
 
         public void Process(Assembly assembly, Model.Model model)
         {
-            assembly.ExportedTypes.Where(t => t.GetTypeInfo().IsClass && !t.GetTypeInfo().IsAbstract).ForEach(t =>
+            assembly.ExportedTypes.Where(t => InclusionFilter(t)).ForEach(t =>
             {
                 var element = new Element(TypeLabeler(t));
                 model.Add(element);
@@ -121,9 +124,9 @@ namespace AgileViews.Scrape
                     var name = property.Name;
                     var r = new Relationship
                     {
-                        SourceName = t.FullName,
+                        SourceName = TypeLabeler(t).QualifiedName,
                         Label = name,
-                        TargetName = type.FullName
+                        TargetName = TypeLabeler(property.PropertyType).QualifiedName
                     };
                     model.Add(r);
 

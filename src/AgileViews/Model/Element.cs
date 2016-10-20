@@ -33,7 +33,6 @@ namespace AgileViews.Model
         string QualifiedName { get; }
     }
 
-    [DebuggerDisplay("{QualifiedName}")]
     public class Element<T> : Element
     {
         public Element(ILabel label) : base(label)
@@ -44,11 +43,10 @@ namespace AgileViews.Model
 
     }
 
+    [DebuggerDisplay("{QualifiedName}")]
     public class Element : Information
     {
         private readonly ILabel _label;
-        private Guid _guid = Guid.NewGuid();
-        private string _name;
 
         public Element(ILabel label)
         {

@@ -16,7 +16,7 @@ namespace AgileViews.Export.Jekyll
 
         public string Path(View view)
         {
-            return System.IO.Path.Combine(_jekyllPath, _workspace.Name, $"{view.Subject.Name}.{view.ViewType}.md");
+            return System.IO.Path.Combine(System.IO.Path.GetFullPath(_jekyllPath), _workspace.Name, $"{view.Subject.Name}.{view.ViewType}.md");
         }
 
         public string Permalink(View view)
